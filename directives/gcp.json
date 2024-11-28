@@ -1,0 +1,6 @@
+{
+  "$schema": "./schema.json",
+  "name": "GCP",
+  "description": "Google Cloud Platform",
+  "commands": []
+}

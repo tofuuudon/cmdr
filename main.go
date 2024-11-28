@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 
 	"github.com/charmbracelet/bubbles/list"
@@ -10,6 +12,11 @@ import (
 )
 
 var docStyle = lipgloss.NewStyle().Margin(1, 2)
+
+type directive struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
 
 type item struct {
 	title, desc string
@@ -48,8 +55,15 @@ func (m model) View() string {
 }
 
 func main() {
+	directiveFile, _ := os.Open("./directives/aws.json")
+	directiveBytes, _ := io.ReadAll(directiveFile)
+
+	var directive directive
+
+	json.Unmarshal(directiveBytes, &directive)
+
 	items := []list.Item{
-		item{title: "AWS", desc: "Amazon Web Services"},
+		item{title: directive.Name, desc: directive.Description},
 	}
 
 	m := model{list: list.New(items, list.NewDefaultDelegate(), 0, 0)}
