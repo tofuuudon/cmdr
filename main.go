@@ -14,7 +14,8 @@ import (
 var docStyle = lipgloss.NewStyle().Margin(1, 2)
 
 type directive struct {
-	Name        string `json:"name"`
+	ID          string `json:"id"`
+	Title       string `json:"title"`
 	Description string `json:"description"`
 }
 
@@ -23,15 +24,16 @@ type config struct {
 }
 
 type item struct {
-	title, desc string
+	id, title, description string
 }
 
 func (i item) Title() string       { return i.title }
-func (i item) Description() string { return i.desc }
+func (i item) Description() string { return i.description }
 func (i item) FilterValue() string { return i.title }
 
 type model struct {
-	list list.Model
+	list        list.Model
+	directiveID string
 }
 
 func (m model) Init() tea.Cmd {
@@ -41,8 +43,15 @@ func (m model) Init() tea.Cmd {
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		if msg.String() == "ctrl+c" {
+		switch key := msg.String(); key {
+		case "ctrl+c":
 			return m, tea.Quit
+		case "enter":
+			i, ok := m.list.SelectedItem().(item)
+			if ok {
+				m.directiveID = i.title
+			}
+			return m, nil
 		}
 	case tea.WindowSizeMsg:
 		h, v := docStyle.GetFrameSize()
@@ -74,7 +83,7 @@ func main() {
 		var directive directive
 		json.Unmarshal(directiveBytes, &directive)
 
-		items = append(items, item{title: directive.Name, desc: directive.Description})
+		items = append(items, item{id: directive.ID, title: directive.Title, description: directive.Description})
 	}
 
 	m := model{list: list.New(items, list.NewDefaultDelegate(), 0, 0)}

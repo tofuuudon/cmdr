@@ -3,7 +3,7 @@
   "title": "Directive",
   "type": "object",
   "properties": {
-    "name": {
+    "title": {
       "description": "Name of the directive",
       "type": "string"
     },
@@ -17,17 +17,20 @@
       "items": {
         "type": "object",
         "properties": {
-          "name": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
             "type": "string"
           },
           "command": {
             "type": "string"
           }
         },
-        "required": ["name", "command"]
+        "required": ["id", "title", "command"]
       }
     }
   },
 
-  "required": ["name", "description", "commands"]
+  "required": ["id", "title", "description", "commands"]
 }

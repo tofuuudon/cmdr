@@ -1,10 +1,12 @@
 {
   "$schema": "../schema/directive.json",
-  "name": "AWS",
+  "id": "aws",
+  "title": "AWS",
   "description": "Amazon Web Services",
   "commands": [
     {
-      "name": "WhoAmI",
+      "id": "sts-get-callter-identity",
+      "title": "Who Am I",
       "command": "aws sts get-caller-identity"
     }
   ]
