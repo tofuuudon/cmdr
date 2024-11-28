@@ -1,27 +1,16 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
 	"os"
 
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/tofuuudon/cmdr/internal/loader"
 )
 
 var docStyle = lipgloss.NewStyle().Margin(1, 2)
-
-type directive struct {
-	ID          string `json:"id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-}
-
-type config struct {
-	Directives []string `json:"directives"`
-}
 
 type item struct {
 	id, title, description string
@@ -41,6 +30,14 @@ func (m model) Init() tea.Cmd {
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	directives := loader.GetDirectives()
+
+	var items []list.Item
+	for _, directive := range directives {
+		items = append(items, item{id: directive.ID, title: directive.Title, description: directive.Description})
+	}
+	m.list.SetItems(items)
+
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch key := msg.String(); key {
@@ -68,25 +65,7 @@ func (m model) View() string {
 }
 
 func main() {
-	configFile, _ := os.Open("./config.json")
-	configBytes, _ := io.ReadAll(configFile)
-
-	var config config
-	json.Unmarshal(configBytes, &config)
-
-	items := []list.Item{}
-
-	for _, directivePath := range config.Directives {
-		directiveFile, _ := os.Open(directivePath)
-		directiveBytes, _ := io.ReadAll(directiveFile)
-
-		var directive directive
-		json.Unmarshal(directiveBytes, &directive)
-
-		items = append(items, item{id: directive.ID, title: directive.Title, description: directive.Description})
-	}
-
-	m := model{list: list.New(items, list.NewDefaultDelegate(), 0, 0)}
+	m := model{list: list.New([]list.Item{}, list.NewDefaultDelegate(), 0, 0)}
 	m.list.Title = "Directives"
 
 	p := tea.NewProgram(m, tea.WithAltScreen())
