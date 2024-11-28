@@ -1,5 +1,5 @@
 {
-  "$schema": "./schema.json",
+  "$schema": "../schema/directive.json",
   "name": "GCP",
   "description": "Google Cloud Platform",
   "commands": []

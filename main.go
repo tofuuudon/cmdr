@@ -18,6 +18,10 @@ type directive struct {
 	Description string `json:"description"`
 }
 
+type config struct {
+	Directives []string `json:"directives"`
+}
+
 type item struct {
 	title, desc string
 }
@@ -55,15 +59,22 @@ func (m model) View() string {
 }
 
 func main() {
-	directiveFile, _ := os.Open("./directives/aws.json")
-	directiveBytes, _ := io.ReadAll(directiveFile)
+	configFile, _ := os.Open("./config.json")
+	configBytes, _ := io.ReadAll(configFile)
 
-	var directive directive
+	var config config
+	json.Unmarshal(configBytes, &config)
 
-	json.Unmarshal(directiveBytes, &directive)
+	items := []list.Item{}
 
-	items := []list.Item{
-		item{title: directive.Name, desc: directive.Description},
+	for _, directivePath := range config.Directives {
+		directiveFile, _ := os.Open(directivePath)
+		directiveBytes, _ := io.ReadAll(directiveFile)
+
+		var directive directive
+		json.Unmarshal(directiveBytes, &directive)
+
+		items = append(items, item{title: directive.Name, desc: directive.Description})
 	}
 
 	m := model{list: list.New(items, list.NewDefaultDelegate(), 0, 0)}

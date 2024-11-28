@@ -1,5 +1,5 @@
 {
-  "$schema": "./schema.json",
+  "$schema": "../schema/directive.json",
   "name": "AWS",
   "description": "Amazon Web Services",
   "commands": [

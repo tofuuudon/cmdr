@@ -1,0 +1,4 @@
+{
+  "$schema": "./schema/config.json",
+  "directives": ["./directives/aws.json", "./directives/gcp.json"]
+}
