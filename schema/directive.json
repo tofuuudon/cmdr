@@ -23,11 +23,11 @@
           "title": {
             "type": "string"
           },
-          "command": {
+          "exec": {
             "type": "string"
           }
         },
-        "required": ["id", "title", "command"]
+        "required": ["id", "title", "exec"]
       }
     }
   },

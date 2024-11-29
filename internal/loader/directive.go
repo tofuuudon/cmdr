@@ -6,13 +6,21 @@ import (
 	"os"
 )
 
-type Directive struct {
+type Command struct {
 	ID          string `json:"id"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
+	Exec        string `json:"exec"`
 }
 
-func GetDirectives() []Directive {
+type Directive struct {
+	ID          string    `json:"id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	Commands    []Command `json:"commands"`
+}
+
+func getDirectives() []Directive {
 	config := GetConfig()
 
 	var directives []Directive
@@ -26,4 +34,16 @@ func GetDirectives() []Directive {
 		directives = append(directives, directive)
 	}
 	return directives
+}
+
+func GetCommands() []Command {
+	directives := getDirectives()
+
+	var commands []Command
+	for _, directive := range directives {
+		for _, command := range directive.Commands {
+			commands = append(commands, command)
+		}
+	}
+	return commands
 }

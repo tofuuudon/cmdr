@@ -7,7 +7,7 @@
     {
       "id": "sts-get-callter-identity",
       "title": "Who Am I",
-      "command": "aws sts get-caller-identity"
+      "exec": "aws sts get-caller-identity"
     }
   ]
 }
