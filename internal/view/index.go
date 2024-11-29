@@ -4,7 +4,6 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/tofuuudon/cmdr/internal/loader"
 )
 
 var indexStyle = lipgloss.NewStyle().Width(50)
@@ -18,34 +17,25 @@ func (i item) Description() string { return i.description }
 func (i item) FilterValue() string { return i.title }
 
 type indexModel struct {
-	list      list.Model
-	commandID string
+	list list.Model
 }
 
 func (m indexModel) Init() tea.Cmd {
 	return nil
 }
 
-func (m indexModel) Update(msg tea.Msg) (indexModel, tea.Cmd) {
-	commands := loader.GetCommands()
-
-	var items []list.Item
-	for _, command := range commands {
-		items = append(items, item{id: command.ID, title: command.Title, description: command.Description, exec: command.Exec})
+func (m indexModel) Update(msg tea.Msg, commands *[]list.Item, command *list.Item) (indexModel, tea.Cmd) {
+	if *command != nil {
+		return m, nil
 	}
-	m.list.SetItems(items)
+
+	m.list.SetItems(*commands)
 
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch key := msg.String(); key {
 		case "ctrl+c":
 			return m, tea.Quit
-		case "enter":
-			i, ok := m.list.SelectedItem().(item)
-			if ok {
-				m.commandID = i.id
-			}
-			return m, nil
 		}
 	case tea.WindowSizeMsg:
 		x, y := commonStyle.GetFrameSize()

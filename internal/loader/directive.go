@@ -4,14 +4,20 @@ import (
 	"encoding/json"
 	"io"
 	"os"
+
+	"github.com/charmbracelet/bubbles/list"
 )
 
 type Command struct {
-	ID          string `json:"id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Exec        string `json:"exec"`
+	ID   string `json:"id"`
+	Name string `json:"title"`
+	Desc string `json:"description"`
+	Exec string `json:"exec"`
 }
+
+func (c Command) Title() string       { return c.Name }
+func (c Command) Description() string { return c.Desc }
+func (c Command) FilterValue() string { return c.Name }
 
 type Directive struct {
 	ID          string    `json:"id"`
@@ -36,10 +42,10 @@ func getDirectives() []Directive {
 	return directives
 }
 
-func GetCommands() []Command {
+func GetCommands() []list.Item {
 	directives := getDirectives()
 
-	var commands []Command
+	var commands []list.Item
 	for _, directive := range directives {
 		for _, command := range directive.Commands {
 			commands = append(commands, command)

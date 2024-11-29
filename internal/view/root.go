@@ -4,6 +4,7 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/tofuuudon/cmdr/internal/loader"
 )
 
 var (
@@ -15,7 +16,7 @@ var (
 type RootModel struct {
 	indexModel   indexModel
 	commandModel commandModel
-	focused      int8
+	command      list.Item
 }
 
 func (m RootModel) Init() tea.Cmd {
@@ -23,24 +24,31 @@ func (m RootModel) Init() tea.Cmd {
 }
 
 func (m RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	commands := loader.GetCommands()
+
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "q":
 			return m, tea.Quit
-		case "tab":
-			m.focused = (m.focused + 1) % 2
+		case "enter":
+			item, ok := m.indexModel.list.SelectedItem().(loader.Command)
+			if ok {
+				m.command = item
+			}
+		case "backspace":
+			m.command = nil
 		}
 	}
 
-	m.indexModel, _ = m.indexModel.Update(msg)
-	m.commandModel, _ = m.commandModel.Update(msg)
+	m.indexModel, _ = m.indexModel.Update(msg, &commands, &m.command)
+	m.commandModel, _ = m.commandModel.Update(msg, &m.command)
 	return m, nil
 }
 
 func (m RootModel) View() string {
-	left := m.indexModel.View(m.focused == 0)
-	right := m.commandModel.View(m.focused == 1)
+	left := m.indexModel.View(m.command == nil)
+	right := m.commandModel.View(m.command != nil)
 
 	return lipgloss.JoinHorizontal(lipgloss.Top, left, right)
 }
@@ -52,6 +60,6 @@ func RootView() RootModel {
 	return RootModel{
 		indexModel:   indexModel,
 		commandModel: commandModel,
-		focused:      0,
+		command:      nil,
 	}
 }
