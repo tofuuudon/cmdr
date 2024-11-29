@@ -35,6 +35,7 @@ func (m RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			item, ok := m.indexModel.list.SelectedItem().(loader.Command)
 			if ok {
 				m.command = item
+				m.commandModel, _ = m.commandModel.ExecuteCommand(item.Exec)
 			}
 		case "backspace":
 			m.command = nil
@@ -42,7 +43,7 @@ func (m RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	m.indexModel, _ = m.indexModel.Update(msg, &commands, &m.command)
-	m.commandModel, _ = m.commandModel.Update(msg, &m.command)
+	m.commandModel, _ = m.commandModel.Update(msg)
 	return m, nil
 }
 
@@ -55,7 +56,7 @@ func (m RootModel) View() string {
 
 func RootView() RootModel {
 	indexModel := indexModel{list: list.New([]list.Item{}, list.NewDefaultDelegate(), 0, 50)}
-	commandModel := commandModel{}
+	commandModel := commandModel{data: ""}
 
 	return RootModel{
 		indexModel:   indexModel,
