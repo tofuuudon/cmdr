@@ -23,6 +23,10 @@
           "title": {
             "type": "string"
           },
+          "description": {
+            "description": "What the command does",
+            "type": "string"
+          },
           "exec": {
             "type": "string"
           }

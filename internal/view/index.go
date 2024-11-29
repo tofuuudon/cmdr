@@ -47,6 +47,9 @@ func (m indexModel) Update(msg tea.Msg) (indexModel, tea.Cmd) {
 			}
 			return m, nil
 		}
+	case tea.WindowSizeMsg:
+		x, y := commonStyle.GetFrameSize()
+		m.list.SetSize(msg.Width-x, msg.Height-y)
 	}
 
 	var cmd tea.Cmd

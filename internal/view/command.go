@@ -25,6 +25,5 @@ func (m commandModel) View(focused bool) string {
 	if focused {
 		return focusedStyle.Inherit(commandStyle).Render(m.data)
 	}
-
 	return unfocusedStyle.Inherit(commandStyle).Render(m.data)
 }

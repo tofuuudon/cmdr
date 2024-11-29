@@ -6,8 +6,15 @@
   "commands": [
     {
       "id": "sts-get-callter-identity",
-      "title": "Who Am I",
+      "title": "Caller Identity",
+      "description": "Show Caller Identity",
       "exec": "aws sts get-caller-identity"
+    },
+    {
+      "id": "s3-list-buckets",
+      "title": "List Buckets",
+      "description": "List all S3 buckets.",
+      "exec": "aws s3 list-buckets"
     }
   ]
 }
