@@ -5,15 +5,17 @@ import (
 	"os/exec"
 	"strings"
 
+	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
 
-var commandStyle = lipgloss.NewStyle().Width(60)
+var commandStyle = lipgloss.NewStyle()
 
 type commandModel struct {
-	data string
-	exec string
+	spinner spinner.Model
+	data    string
+	exec    string
 }
 
 func (m commandModel) Init() tea.Cmd {
@@ -21,6 +23,14 @@ func (m commandModel) Init() tea.Cmd {
 }
 
 func (m commandModel) Update(msg tea.Msg) (commandModel, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+		x, y := commonStyle.GetFrameSize()
+		width := msg.Width/3*2 - x
+		height := msg.Height - y
+		commandStyle = commandStyle.Width(width).Height(height)
+	}
+
 	return m, nil
 }
 

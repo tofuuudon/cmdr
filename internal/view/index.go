@@ -6,7 +6,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-var indexStyle = lipgloss.NewStyle().Width(50)
+var indexStyle = lipgloss.NewStyle()
 
 type item struct {
 	id, title, description, exec string
@@ -39,7 +39,11 @@ func (m indexModel) Update(msg tea.Msg, commands *[]list.Item, command *list.Ite
 		}
 	case tea.WindowSizeMsg:
 		x, y := commonStyle.GetFrameSize()
-		m.list.SetSize(msg.Width-x, msg.Height-y)
+		width := msg.Width/3 - x
+		height := msg.Height - y
+
+		m.list.SetSize(width, height)
+		indexStyle = indexStyle.Width(width)
 	}
 
 	var cmd tea.Cmd

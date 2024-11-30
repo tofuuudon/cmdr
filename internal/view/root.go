@@ -2,6 +2,7 @@ package view
 
 import (
 	"github.com/charmbracelet/bubbles/list"
+	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/tofuuudon/cmdr/internal/loader"
@@ -55,8 +56,12 @@ func (m RootModel) View() string {
 }
 
 func RootView() RootModel {
+	s := spinner.New()
+	s.Spinner = spinner.Dot
+	s.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
+
 	indexModel := indexModel{list: list.New([]list.Item{}, list.NewDefaultDelegate(), 0, 50)}
-	commandModel := commandModel{data: ""}
+	commandModel := commandModel{spinner: s, data: ""}
 
 	return RootModel{
 		indexModel:   indexModel,
