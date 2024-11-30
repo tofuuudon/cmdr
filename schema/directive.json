@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Directive",
+  "type": "object",
+  "properties": {
+    "title": {
+      "description": "Name of the directive",
+      "type": "string"
+    },
+    "description": {
+      "description": "What the directive does",
+      "type": "string"
+    },
+    "commands": {
+      "description": "List of all commands available",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "description": "What the command does",
+            "type": "string"
+          },
+          "exec": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "title", "exec"]
+      }
+    }
+  },
+
+  "required": ["id", "title", "description", "commands"]
+}

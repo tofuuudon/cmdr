@@ -1,0 +1,7 @@
+{
+  "$schema": "../schema/directive.json",
+  "id": "gcp",
+  "title": "GCP",
+  "description": "Google Cloud Platform",
+  "commands": []
+}

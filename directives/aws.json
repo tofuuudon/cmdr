@@ -1,0 +1,20 @@
+{
+  "$schema": "../schema/directive.json",
+  "id": "aws",
+  "title": "AWS",
+  "description": "Amazon Web Services",
+  "commands": [
+    {
+      "id": "sts-get-callter-identity",
+      "title": "Caller Identity",
+      "description": "Show Caller Identity",
+      "exec": "aws sts get-caller-identity"
+    },
+    {
+      "id": "s3-list-buckets",
+      "title": "List Buckets",
+      "description": "List all S3 buckets.",
+      "exec": "aws s3api list-buckets"
+    }
+  ]
+}
